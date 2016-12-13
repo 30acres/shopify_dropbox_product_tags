@@ -38,12 +38,8 @@ end
 class ProductTagData
   def initialize(path)
     @path = path
-    if ENV['SLACK_CMW_WEBHOOK']
-      puts 'init'
-      @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#cmw_data',
-      username: 'Import Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
-    end
-
+    @notifier = ENV['SLACK_CMW_WEBHOOK'] ? Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#cmw_data',
+      username: 'Import Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175' : ''
   end
 
   def get_csv
@@ -82,10 +78,8 @@ class ProductTagData
 
   def self.process_products
 
-    if ENV['SLACK_CMW_WEBHOOK']
       @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#cmw_data',
         username: 'Data Notifier', icon_url: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
-    end
 
     shopify_variants = []
     [1,2,3].each do |page|
