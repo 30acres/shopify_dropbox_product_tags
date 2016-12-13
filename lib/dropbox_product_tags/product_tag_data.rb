@@ -119,14 +119,14 @@ class ProductTagData
 
 
     if variant.nil?
-      puts 'NO MATCH'
-      product = ShopifyAPI::Product.new
+      # puts 'NO MATCH'
+      # product = ShopifyAPI::Product.new
     else
       puts 'MATCH FOUND'
       product = ShopifyAPI::Product.find(variant.product_id)
       oldtags = product.tags
     end
-    designer = match.data["Designer"].strip
+    # designer = match.data["Designer"].strip
 
     # clean_designers.each do |cd|
     #   if designer.downcase == cd[0].downcase
@@ -134,7 +134,7 @@ class ProductTagData
     #   end
     # end
 
-    product.title = match.data["Product Title"].gsub('  ',' ')
+    # product.title = match.data["Product Title"].gsub('  ',' ')
     # clean_designers.each do |cd|
     #   product.title = product.title.gsub(cd[0],cd[1])
     # end
@@ -178,8 +178,10 @@ class ProductTagData
 'rating-spectator',
 'rating-suckling',
 'rating-wro'
-]
-    )
+
+
+])
+puts 'Got here'
   #
     tagz = []
     ordered_tags.each do |tag|
