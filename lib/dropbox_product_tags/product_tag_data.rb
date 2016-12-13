@@ -6,36 +6,44 @@ require 'slack-notifier'
 
 module ImportProductTags
 
-  def self.update_all_products(path, token)
-    @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
-      username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
-
-    @notifier.ping "[Product Data] Started Import"
-    if path and token
+  def self.update_all_products(path)
+    if ENV['SLACK_CMW_WEBHOOK']
+      puts 'Notifier'
+      @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
+        username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
+      @notifier.ping "[Product Data] Started Import"
+    end
+    if path
       ## Clear the Decks
-      ProductData.delete_datum
+      ProductTagData.delete_datum
 
       ## get the csv
-      ProductData.new(path,token).get_csv
+      binding.pry
+      ProductTagData.new(path).get_csv
 
       ## parse the rows
       ## update the descriptions
-      ProductData.process_products
+      ProductTagData.process_products
 
       ## Clear the decks again
-      ProductData.delete_datum
-      @notifier.ping "[Product Data] Finished Import"
+      ProductTagData.delete_datum
+      if ENV['SLACK_CMW_WEBHOOK']
+        @notifier.ping "[Product Data] Finished Import"
+      end
     end
 
   end
 end
 
-class ProductData
-  def initialize(path,token=nil)
+class ProductTagData
+  def initialize(path)
     @path = path
     @token = token
-    @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
-      username: 'Import Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
+    if ENV['SLACK_CMW_WEBHOOK']
+      puts 'init'
+      # @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
+      # username: 'Import Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
+    end
 
   end
 
@@ -44,7 +52,7 @@ class ProductData
     already_imported = Import.where(path: path, modified: modified).any?
 
     unless already_imported
-      @notifier.ping "[Product Data] Files Changed"
+      @notifier.ping "[Product Data] Files Changed" if ENV['SLACK_CMW_WEBHOOK']
       CSV.parse(file, { headers: true }) do |product|
         # encoded = CSV.parse(product).to_hash.to_json
         encoded = product.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
@@ -55,7 +63,7 @@ class ProductData
       end
       Import.new(path: path, modified: modified).save!
     else
-      @notifier.ping "[Product Data] No Changes"
+      @notifier.ping "[Product Data] No Changes" if ENV['SLACK_CMW_WEBHOOK']
     end
   end
 
@@ -65,6 +73,7 @@ class ProductData
   end
 
   def path
+    @path
     # connect_to_source.metadata(@path)['contents'][0]['path']
   end
 
@@ -75,7 +84,7 @@ class ProductData
 
   def file
     # connect_to_source.get_file(path)
-    'https://s3.amazonaws.com/mydonedone.com/donedone_issuetracking_11034/ce292cb3-f1e4-43d2-ae4b-480b6da79b9b_/catalog_product_20161212_035806.csv'
+    open('https://s3.amazonaws.com/mydonedone.com/donedone_issuetracking_11034/ce292cb3-f1e4-43d2-ae4b-480b6da79b9b_/catalog_product_20161212_035806.csv').read()
   end
 
 
@@ -106,14 +115,14 @@ class ProductData
         if matches.any?
           # binding.pry
           v = matches.first
-          ProductData.update_product_descriptions(v, data)
+          ProductTagData.update_product_descriptions(v, data)
         else
           v = nil
-          ProductData.update_product_descriptions(v, data)
+          ProductTagData.update_product_descriptions(v, data)
         end
       else
         v = nil
-        ProductData.update_product_descriptions(v, data)
+        ProductTagData.update_product_descriptions(v, data)
       end
     end
 
