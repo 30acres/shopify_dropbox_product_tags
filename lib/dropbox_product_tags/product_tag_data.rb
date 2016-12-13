@@ -48,7 +48,7 @@ class ProductTagData
 
   def get_csv
 
-    already_imported = Import.where(path: path, modified: modified).any?
+    already_imported = Import.where(path: path).any?
 
     unless already_imported
       @notifier.ping "[Product Data] Files Changed" if ENV['SLACK_CMW_WEBHOOK']
@@ -60,7 +60,7 @@ class ProductTagData
         RawDatum.create(data: encoded_more, client_id: 0, status: 9)
 
       end
-      Import.new(path: path, modified: modified).save!
+      Import.new(path: path).save!
     else
       @notifier.ping "[Product Data] No Changes" if ENV['SLACK_CMW_WEBHOOK']
     end
@@ -72,24 +72,20 @@ class ProductTagData
   end
 
   def path
-    @path
-    # connect_to_source.metadata(@path)['contents'][0]['path']
-  end
-
-  def modified
-    # "modified"=>"Wed, 03 Aug 2016 00:53:28 +0000",
-    # connect_to_source.metadata(@path)['contents'][0]['modified']
+    'https://s3.amazonaws.com/mydonedone.com/donedone_issuetracking_11034/ce292cb3-f1e4-43d2-ae4b-480b6da79b9b_/catalog_product_20161212_035806.csv'
   end
 
   def file
-    # connect_to_source.get_file(path)
-    open('https://s3.amazonaws.com/mydonedone.com/donedone_issuetracking_11034/ce292cb3-f1e4-43d2-ae4b-480b6da79b9b_/catalog_product_20161212_035806.csv').read()
+    open(path).read()
   end
 
 
   def self.process_products
-    @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
-      username: 'Data Notifier', icon_url: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
+
+    if ENV['SLACK_CMW_WEBHOOK']
+      @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
+        username: 'Data Notifier', icon_url: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
+    end
 
     shopify_variants = []
     [1,2,3].each do |page|
@@ -290,7 +286,7 @@ class ProductTagData
     puts v.inspect
     # binding.pry
     product.variants = [v]
-    product.save!
+    # product.save!
     # v.save!
     puts '====================================='
 
