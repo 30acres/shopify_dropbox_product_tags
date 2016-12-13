@@ -84,7 +84,7 @@ class ProductTagData
     # binding.pry
 
     RawDatum.where(status: 9).each do |data|
-      binding.pry
+      # binding.pry
       code = data.data["sku"]
       if shopify_variants.any? and !code.blank?
         matches = shopify_variants.select { |sv| sv.sku == code }
