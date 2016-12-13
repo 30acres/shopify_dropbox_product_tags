@@ -84,7 +84,7 @@ class ProductTagData
     # binding.pry
 
     RawDatum.where(status: 9).each do |data|
-      binding.pry
+      # binding.pry
       code = data.data["sku"]
       if shopify_variants.any? and !code.blank?
         matches = shopify_variants.select { |sv| sv.sku == code }
@@ -121,12 +121,12 @@ class ProductTagData
     if variant.nil?
       # puts 'NO MATCH'
       # product = ShopifyAPI::Product.new
-      binding.pry
+      # binding.pry
     else
       puts 'MATCH FOUND'
       product = ShopifyAPI::Product.find(variant.product_id)
       oldtags = product.tags
-      binding.pry
+      # binding.pry
     end
     # designer = match.data["Designer"].strip
 
@@ -255,7 +255,7 @@ puts 'Got here'
     # # binding.pry
     # product.variants = [v]
     binding.pry
-    # product.save!
+    product.save!
     # v.save!
     puts '====================================='
 
