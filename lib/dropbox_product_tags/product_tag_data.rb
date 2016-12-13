@@ -9,7 +9,7 @@ module ImportProductTags
   def self.update_all_products(path)
     if Rails.env.production?
       puts 'Notifier'
-      @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
+      @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#cmw_data',
         username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
       @notifier.ping "[Product Data] Started Import"
     end
@@ -40,7 +40,7 @@ class ProductTagData
     @path = path
     if ENV['SLACK_CMW_WEBHOOK']
       puts 'init'
-      @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
+      @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#cmw_data',
       username: 'Import Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
     end
 
@@ -83,7 +83,7 @@ class ProductTagData
   def self.process_products
 
     if ENV['SLACK_CMW_WEBHOOK']
-      @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
+      @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#cmw_data',
         username: 'Data Notifier', icon_url: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
     end
 
