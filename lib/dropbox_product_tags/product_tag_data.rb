@@ -7,7 +7,7 @@ require 'slack-notifier'
 module ImportProductTags
 
   def self.update_all_products(path)
-    if ENV['SLACK_CMW_WEBHOOK']
+    if Rails.env.production?
       puts 'Notifier'
       @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
         username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
@@ -18,7 +18,7 @@ module ImportProductTags
       ProductTagData.delete_datum
 
       ## get the csv
-      binding.pry
+      # binding.pry
       ProductTagData.new(path).get_csv
 
       ## parse the rows
@@ -40,8 +40,8 @@ class ProductTagData
     @path = path
     if ENV['SLACK_CMW_WEBHOOK']
       puts 'init'
-      # @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
-      # username: 'Import Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
+      @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
+      username: 'Import Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
     end
 
   end
