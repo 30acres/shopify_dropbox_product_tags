@@ -6,7 +6,7 @@ require 'slack-notifier'
 
 module ImportProductTags
 
-  def self.update_all_products(path)
+  def self.update_all_products(path='https://s3.amazonaws.com/mydonedone.com/donedone_issuetracking_11034/ce292cb3-f1e4-43d2-ae4b-480b6da79b9b_/catalog_product_20161212_035806.csv')
       @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#cmw_data',
         username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
       @notifier.ping "[Product Data] Started Import"
