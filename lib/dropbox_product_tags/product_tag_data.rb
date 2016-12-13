@@ -85,8 +85,8 @@ class ProductTagData
 
     RawDatum.where(status: 9).each do |data|
       binding.pry
-      code = data.data["*ItemCode"]
-      if shopify_variants.any?
+      code = data.data["sku"]
+      if shopify_variants.any? and !code.blank?
         matches = shopify_variants.select { |sv| sv.sku == code }
         # binding.pry
         if matches.any?
@@ -149,9 +149,36 @@ class ProductTagData
     # product.metafields_global_description_tag = desc
 
     ordered_tags = Array.new([
-    'Source Country Size',
-    'Condition',
-    'Has Dustbag']
+'hot-price',
+'aks-choice',
+'reduced',
+'last-stocks',
+'country',
+'estate',
+'product-awards',
+'product-ratings',
+'rating-cellarmaster',
+'region',
+'vintage',
+'awards-decanter-bronze',
+'awards-decanter-gold',
+'awards-decanter-silver',
+'awards-international-bronze',
+'awards-international-gold',
+'awards-international-silver',
+'awards-winespirits-bronze',
+'awards-winespirits-gold',
+'awards-winespirits-silver',
+'rating-cellarmaster',
+'rating-decantar',
+'rating-enthusiast',
+'rating-halliday',
+'rating-oliver',
+'rating-parker',
+'rating-spectator',
+'rating-suckling',
+'rating-wro'
+]
     )
   #
     tagz = []
