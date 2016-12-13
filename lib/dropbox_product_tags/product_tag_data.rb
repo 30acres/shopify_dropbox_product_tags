@@ -38,7 +38,6 @@ end
 class ProductTagData
   def initialize(path)
     @path = path
-    @token = token
     if ENV['SLACK_CMW_WEBHOOK']
       puts 'init'
       # @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
@@ -87,14 +86,6 @@ class ProductTagData
     open('https://s3.amazonaws.com/mydonedone.com/donedone_issuetracking_11034/ce292cb3-f1e4-43d2-ae4b-480b6da79b9b_/catalog_product_20161212_035806.csv').read()
   end
 
-
-  def connect_to_source
-    # w = DropboxOAuth2FlowNoRedirect.new(APP_KEY, APP_SECRET)
-    # authorize_url = flow.start()
-    if @token
-      DropboxClient.new(@token)
-    end
-  end
 
   def self.process_products
     @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
