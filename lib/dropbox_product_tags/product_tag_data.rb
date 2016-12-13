@@ -121,10 +121,12 @@ class ProductTagData
     if variant.nil?
       # puts 'NO MATCH'
       # product = ShopifyAPI::Product.new
+      binding.pry
     else
       puts 'MATCH FOUND'
       product = ShopifyAPI::Product.find(variant.product_id)
       oldtags = product.tags
+      binding.pry
     end
     # designer = match.data["Designer"].strip
 
