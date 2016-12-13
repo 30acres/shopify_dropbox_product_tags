@@ -6,7 +6,7 @@ module DropboxProductTags
 
   def self.update_all_products(path=nil, token=nil)
     payload = ''
-    ImportProductData.update_all_product_tags(path,token)
+    ImportProductTags.update_all_product_tags(path,token)
     payload = 'Successful Import (More info soon...)'
     payload
   end

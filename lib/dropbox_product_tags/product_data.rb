@@ -4,7 +4,7 @@ require "product/product"
 require 'csv'
 require 'slack-notifier'
 
-module ImportProductData
+module ImportProductTags
 
   def self.update_all_products(path, token)
     @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#product_data_feed',
