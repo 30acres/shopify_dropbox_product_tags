@@ -91,20 +91,20 @@ class ProductTagData
         if matches.any?
           # binding.pry
           v = matches.first
-          ProductTagData.update_product_descriptions(v, data)
+          ProductTagData.update_product_tags(v, data)
         else
-          v = nil
-          ProductTagData.update_product_descriptions(v, data)
+          # v = nil
+          # ProductTagData.update_product_descriptions(v, data)
         end
       else
-        v = nil
-        ProductTagData.update_product_descriptions(v, data)
+        # v = nil
+        # ProductTagData.update_product_descriptions(v, data)
       end
     end
 
   end
 
-  def self.update_product_descriptions(variant, match)
+  def self.update_product_tags(variant, match)
     puts '==== C R E D I T ===='
     puts ShopifyAPI.credit_used
     if ShopifyAPI.credit_used >= 38
@@ -114,7 +114,7 @@ class ProductTagData
     puts '---=============-----'
     sleep(1)
     oldtags = ''
-    clean_designers = [['Cline','Céline'],['lvaro','Álvaro'],['Vanessa Bruno (ath)','Vanessa Bruno (athé)'],['Marsll','Marsèll'],['Hrve Lger','Hérve Léger'],['Alaa','Alaïa']]
+    # clean_designers = [['Cline','Céline'],['lvaro','Álvaro'],['Vanessa Bruno (ath)','Vanessa Bruno (athé)'],['Marsll','Marsèll'],['Hrve Lger','Hérve Léger'],['Alaa','Alaïa']]
 
 
     if variant.nil?
@@ -127,102 +127,49 @@ class ProductTagData
     end
     designer = match.data["Designer"].strip
 
-    clean_designers.each do |cd|
-      if designer.downcase == cd[0].downcase
-        designer = cd[1]
-      end
-    end
+    # clean_designers.each do |cd|
+    #   if designer.downcase == cd[0].downcase
+    #     designer = cd[1]
+    #   end
+    # end
 
     product.title = match.data["Product Title"].gsub('  ',' ')
-    clean_designers.each do |cd|
-      product.title = product.title.gsub(cd[0],cd[1])
-    end
+    # clean_designers.each do |cd|
+    #   product.title = product.title.gsub(cd[0],cd[1])
+    # end
 
-    desc = match.data["Description"]
-    product.body_html = desc
-    product.product_type = match.data['Category']
+    # desc = match.data["Description"]
+    # product.body_html = desc
+    # product.product_type = match.data['Category']
 
-    product.vendor = designer
+    # product.vendor = designer
 
-    product.metafields_global_title_tag = product.title
-    product.metafields_global_description_tag = desc
+    # product.metafields_global_title_tag = product.title
+    # product.metafields_global_description_tag = desc
 
     ordered_tags = Array.new([
     'Source Country Size',
     'Condition',
-    'Outer Condition Detail',
-    'Inner Condition Detail',
-    'Sole Condition Detail',
-    'Detailed Colour',
-    'Pattern',
-    'Detailed Material',
-    'Lining Material',
-    'Sole Material',
-    'Heel Height',
-    'Width',
-    'Height',
-    'Depth',
-    'Length',
-    'Has Tag',
-    'Has Original Box',
-    'Has Dustbag'])
-    unordered_tags = Array.new([
-    'Category',
-    'Sub-category 1',
-    'Sub-category 2',
-    'Country',
-    'Australian Size',
-    'Colour',
-    'Material',
-    'Gender',
-    'Season',
-    'Style',
-    'Partywear',
-    'Workwear',
-    'Casual Wear',
-    'Vintage',
-    'We Love',
-    'Community Loves',
-    'On Sale',
-    'Recommended Retail Price',
-    'IsConsigned',
-    'NumStockAvailable',
-    'Publish on Website'
-  ])
+    'Has Dustbag']
+    )
+  #
     tagz = []
-    letters = ('aa'..'zz').to_a
-    letters = letters.first
     ordered_tags.each do |tag|
-      letters = letters.next
-      if !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?))
-        tagz << "#{letters}_#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub('  ',' ').gsub(',','')}".strip
-      end
-    end
-    unordered_tags.each do |tag|
       if !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?))
         tagz << "#{tag.underscore.humanize.titleize}: #{match.data[tag].gsub('  ',' ').gsub(',','')}".strip
       end
     end
-    tagz << "Designer: #{designer}".strip
     product.tags = tagz.join(',')
 
-    product_options = []
-    ['Australian Size','Colour','Material'].each_with_index do |opt,index|
-      # binding.pry
-      # if !(match.data[opt].to_s.downcase.include?('n/a') or match.data[opt].nil? or match.data[opt].blank?)
-        product_options << ShopifyAPI::Option.new(name: opt)
-      # end
-    end
-    product.options = product_options
 
     puts "#{product.title} :: UPDATED!!!"
-    if match.data["Publish on Website"] == 'Yes'
-     if !product.id or (product.id and product.published_at.nil?)
-        product.published_at = DateTime.now - 10.hours
-      end
-    else
-      product.published_at = nil
-    end
+    # if match.data["Publish on Website"] == 'Yes'
+    #  if !product.id or (product.id and product.published_at.nil?)
+    #     product.published_at = DateTime.now - 10.hours
+    #   end
+    # else
+    #   product.published_at = nil
+    # end
     puts product.inspect
 
     puts '====================================='
@@ -234,47 +181,48 @@ class ProductTagData
     if product.id
       v = product.variants.first
     else
-      v = ShopifyAPI::Variant.new
+      # v = ShopifyAPI::Variant.new
     end
 
-    ['Australian Size','Colour','Material'].each_with_index do |opt,index|
-      # binding.pry
-        if index == 0
-          d = match.data[opt].to_s.strip
-          v.option1 = d.blank? ? 'n/a' : d
-        end
-        if index == 1
-          d = match.data[opt].to_s.strip
-          v.option2 = d.blank? ? 'n/a' : d
-        end
-        if index == 2
-          d = match.data[opt].to_s.strip
-          v.option3 = d.blank? ? 'n/a' : d
-        end
-    end
+    # ['Australian Size','Colour','Material'].each_with_index do |opt,index|
+    #   # binding.pry
+    #     if index == 0
+    #       d = match.data[opt].to_s.strip
+    #       v.option1 = d.blank? ? 'n/a' : d
+    #     end
+    #     if index == 1
+    #       d = match.data[opt].to_s.strip
+    #       v.option2 = d.blank? ? 'n/a' : d
+    #     end
+    #     if index == 2
+    #       d = match.data[opt].to_s.strip
+    #       v.option3 = d.blank? ? 'n/a' : d
+    #     end
+    # end
 
-    compare_at_price = Float(match.data["Price (before Sale)"].to_s.gsub('$','')) rescue false ? match.data["Price (before Sale)"] : nil
+    # compare_at_price = Float(match.data["Price (before Sale)"].to_s.gsub('$','')) rescue false ? match.data["Price (before Sale)"] : nil
 
     v.product_id = product.id
-    v.price = match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f
-    v.sku = match.data["*ItemCode"]
-    v.grams = match.data["Weight (grams)"].to_i
-    v.compare_at_price = compare_at_price
+    # v.price = match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f
+    # v.sku = match.data["*ItemCode"]
+    # v.grams = match.data["Weight (grams)"].to_i
+    # v.compare_at_price = compare_at_price
 
-    v.inventory_quantity = match.data["NumStockAvailable"]
-    v.old_inventory_quantity = match.data["NumStockAvailable"]
-    v.requires_shipping = true
-    v.barcode = nil
-    v.taxable = true
-    v.position = 1
-    v.inventory_policy = 'deny'
-    v.fulfillment_service = "manual"
-    v.inventory_management = "shopify"
-    # weight: match.data["Weight (grams)"].to_i/100,
-    v.weight_unit = "g"
-    puts v.inspect
-    # binding.pry
-    product.variants = [v]
+    # v.inventory_quantity = match.data["NumStockAvailable"]
+    # v.old_inventory_quantity = match.data["NumStockAvailable"]
+    # v.requires_shipping = true
+    # v.barcode = nil
+    # v.taxable = true
+    # v.position = 1
+    # v.inventory_policy = 'deny'
+    # v.fulfillment_service = "manual"
+    # v.inventory_management = "shopify"
+    # # weight: match.data["Weight (grams)"].to_i/100,
+    # v.weight_unit = "g"
+    # puts v.inspect
+    # # binding.pry
+    # product.variants = [v]
+    binding.pry
     # product.save!
     # v.save!
     puts '====================================='
