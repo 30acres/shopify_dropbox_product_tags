@@ -153,7 +153,7 @@ class ProductTagData
     ordered_tags = Array.new([
 'hot_price',
 'aks_choice',
-'reduced',
+'reduced_to_clear',
 'last-stocks',
 'country',
 'estate',
