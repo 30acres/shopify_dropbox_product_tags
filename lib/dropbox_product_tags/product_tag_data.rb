@@ -50,7 +50,7 @@ class ProductTagData
         encoded = product.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
         encoded_more = encoded.to_json
         puts encoded_more
-        RawDatum.create(data: encoded_more, client_id: 0, status: 9)
+        RawDatum.create(data: encoded_more, client_id: 0, status: 10)
 
       end
       Import.new(path: path).save!
@@ -61,7 +61,7 @@ class ProductTagData
 
   def self.delete_datum
     ## so cheap and dirty
-    RawDatum.where(status: 9).destroy_all
+    RawDatum.where(status: 10).destroy_all
   end
 
   def path
@@ -83,7 +83,7 @@ class ProductTagData
     shopify_variants = shopify_variants.flatten
     # binding.pry
 
-    RawDatum.where(status: 9).each do |data|
+    RawDatum.where(status: 10).each do |data|
       # binding.pry
       code = data.data["sku"]
       if shopify_variants.any? and !code.blank?
