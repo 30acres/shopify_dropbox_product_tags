@@ -13,7 +13,7 @@ module ImportProductTags
 
     if path
       ## Clear the Decks
-      ProductTagData.delete_datum
+      # ProductTagData.delete_datum
 
       ## get the csv
       # binding.pry
@@ -24,7 +24,7 @@ module ImportProductTags
       ProductTagData.process_products
 
       ## Clear the decks again
-      ProductTagData.delete_datum
+      # ProductTagData.delete_datum
 
       @notifier.ping "[Product Data] Finished Import"
 
@@ -44,6 +44,7 @@ class ProductTagData
     already_imported = Import.where(path: path).any?
 
     unless already_imported
+      Import.new(path: path).save!
       @notifier.ping "[Product Data] Files Changed" if ENV['SLACK_CMW_WEBHOOK']
       CSV.parse(file, { headers: true }) do |product|
         # encoded = CSV.parse(product).to_hash.to_json
@@ -53,7 +54,6 @@ class ProductTagData
         RawDatum.create(data: encoded_more, client_id: 0, status: 10)
 
       end
-      Import.new(path: path).save!
     else
       @notifier.ping "[Product Data] No Changes" if ENV['SLACK_CMW_WEBHOOK']
     end
