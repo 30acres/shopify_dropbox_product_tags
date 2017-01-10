@@ -181,7 +181,7 @@ class ProductTagData
 'rating_spectator',
 'rating_suckling',
 'rating_wro',
-'coming_soon'
+'backstock_preorders'
 ])
 puts 'Got here'
   #
