@@ -50,9 +50,8 @@ class ProductTagData
         # encoded = CSV.parse(product).to_hash.to_json
         encoded = product.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
         encoded_more = encoded.to_json
-        puts encoded_more
+        # puts encoded_more
         RawDatum.create(data: encoded_more, client_id: 0, status: 10)
-
       end
     else
       @notifier.ping "[Product Data] No Changes" if ENV['SLACK_CMW_WEBHOOK']
@@ -61,7 +60,7 @@ class ProductTagData
 
   def self.delete_datum
     ## so cheap and dirty
-    RawDatum.where(status: 10).destroy_all
+    RawDatum.unscoped.where(status: 10).destroy_all
   end
 
   def path
@@ -77,13 +76,12 @@ class ProductTagData
     @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#cmw_data', username: 'Data Notifier', icon_url: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
   
     shopify_variants = []
-    [1,2,3,4,5,6,7,8,9,10].each do |page|
+    [1,2,3,4,5,6].each do |page|
       shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku, product_id', page: page } )
     end
     shopify_variants = shopify_variants.flatten
-    binding.pry
 
-    RawDatum.where(status: 10).each do |data|
+    RawDatum.unscoped.where(status: 10).each do |data|
       # binding.pry
       code = data.data["sku"]
       if shopify_variants.any? and !code.blank?
