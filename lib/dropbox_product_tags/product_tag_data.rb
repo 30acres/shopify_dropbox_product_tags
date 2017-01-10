@@ -94,6 +94,10 @@ class ProductTagData
           v = matches.first
           ProductTagData.update_product_tags(v, data)
         else
+          puts 'OI - NO MATCH FOUND'
+          puts code 
+          puts '======'
+          sleep(10)
           # v = nil
           # ProductTagData.update_product_descriptions(v, data)
         end
@@ -119,7 +123,7 @@ class ProductTagData
 
 
     if variant.nil?
-      # puts 'NO MATCH'
+      puts 'NO MATCH'
       # product = ShopifyAPI::Product.new
       # binding.pry
     else
