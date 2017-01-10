@@ -180,7 +180,8 @@ class ProductTagData
 'rating_parker',
 'rating_spectator',
 'rating_suckling',
-'rating_wro'
+'rating_wro',
+'coming_soon'
 ])
 puts 'Got here'
   #
