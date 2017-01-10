@@ -43,7 +43,7 @@ class ProductTagData
 
     already_imported = Import.where(path: path).any?
 
-    unless already_imported and 1 == 2
+    unless already_imported
       @notifier.ping "[Product Data] Files Changed" if ENV['SLACK_CMW_WEBHOOK']
       CSV.parse(file, { headers: true }) do |product|
         # encoded = CSV.parse(product).to_hash.to_json
