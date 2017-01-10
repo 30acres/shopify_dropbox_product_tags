@@ -81,7 +81,7 @@ class ProductTagData
       shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku, product_id', page: page } )
     end
     shopify_variants = shopify_variants.flatten
-    # binding.pry
+    binding.pry
 
     RawDatum.where(status: 10).each do |data|
       # binding.pry
