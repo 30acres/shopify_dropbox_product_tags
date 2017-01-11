@@ -50,6 +50,7 @@ class ProductTagData
     puts "===== H E R E ====="
     # unless already_imported
       @notifier.ping "[Product Data] Files Changed"
+      binding.pry
       FCSV.parse(file, headers: true, :header_converters => :symbol) do |row|
         puts file
         puts file.class
