@@ -48,7 +48,7 @@ class ProductTagData
     puts "===== H E R E ====="
     already_imported = Import.where(path: path).any?
     puts "===== H E R E ====="
-    # unless already_imported
+    unless already_imported
       @notifier.ping "[Product Data] Files Changed"
       # binding.pry
       contents = CSV.parse(file, headers: true, :header_converters => :symbol) 
@@ -66,9 +66,9 @@ class ProductTagData
 
       end
       Import.new(path: path).save!
-    # else
-    #   @notifier.ping "[Product Data] No Changes"
-    # end
+    else
+      @notifier.ping "[Product Data] No Changes"
+    end
   end
 
   def self.delete_datum
