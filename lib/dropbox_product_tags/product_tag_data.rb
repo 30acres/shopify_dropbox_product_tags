@@ -52,7 +52,7 @@ class ProductTagData
       @notifier.ping "[Product Data] Files Changed"
       # binding.pry
       contents = CSV.parse(file, headers: true, :header_converters => :symbol) 
-      contents do |row|
+      contents.each do |row|
         puts file
         puts file.class
         puts row
