@@ -52,7 +52,10 @@ class ProductTagData
       puts 'HERE!!!'
       # binding.pry
       rows = CSV.parse(file, { headers: true })
+      puts 'meh'
+      puts rows
       rows.each do |row|
+        puts 'MEH!?'
         # @notifier.ping "[Product Data] #{product.inspect}" if ENV['SLACK_CMW_WEBHOOK']
         # binding.pry
         encoded = CSV.parse(row).to_hash.to_json
