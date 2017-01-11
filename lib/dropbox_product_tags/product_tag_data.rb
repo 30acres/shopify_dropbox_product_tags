@@ -51,7 +51,8 @@ class ProductTagData
     # unless already_imported
       @notifier.ping "[Product Data] Files Changed"
       binding.pry
-      CSV.parse(file, headers: true, :header_converters => :symbol) do |row|
+      contents = CSV.parse(file, headers: true, :header_converters => :symbol) 
+      contents do |row|
         puts file
         puts file.class
         puts row
@@ -59,7 +60,9 @@ class ProductTagData
         encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
         encoded_more = encoded.to_json
         puts encoded_more
-        RawDatum.create(data: encoded_more, client_id: 0, status: 10)
+        if !encoded_more['sku'].blank?
+          RawDatum.create(data: encoded_more, client_id: 0, status: 10)
+        end
 
       end
       Import.new(path: path).save!
