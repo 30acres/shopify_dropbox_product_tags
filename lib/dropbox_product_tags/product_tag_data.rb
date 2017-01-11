@@ -55,9 +55,7 @@ class ProductTagData
       CSV.parse(file, { headers: true }).each do |row|
         # binding.pry
         puts 'MEH!?'
-        # @notifier.ping "[Product Data] #{product.inspect}" if ENV['SLACK_CMW_WEBHOOK']
-        # binding.pry
-        encoded = CSV.parse(row).to_hash.to_json
+        # encoded = CSV.parse(row).to_hash.to_json
         puts '1'
         encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
         puts '2'
