@@ -53,7 +53,7 @@ class ProductTagData
       # binding.pry
       
       CSV.parse(file, { headers: true }).each do |row|
-        binding.pry
+        # binding.pry
         puts 'MEH!?'
         # @notifier.ping "[Product Data] #{product.inspect}" if ENV['SLACK_CMW_WEBHOOK']
         # binding.pry
