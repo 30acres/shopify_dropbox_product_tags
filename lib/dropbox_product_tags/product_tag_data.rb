@@ -55,7 +55,7 @@ class ProductTagData
       CSV.parse(file, { headers: true }).each do |row|
         # binding.pry
         # puts 'MEH!?'
-        encoded = CSV.parse(row).to_hash.to_json
+        # encoded = CSV.parse(row).to_hash.to_json
         puts '1'
         encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
         puts '2'
@@ -63,7 +63,7 @@ class ProductTagData
         puts '3'
         puts encoded_more
 
-        # rd = RawDatum.where(data: row, client_id: 0, status: 10).first_or_create
+        rd = RawDatum.where(data: row, client_id: 0, status: 10).first_or_create
         puts '4'
 
         puts "===================="
