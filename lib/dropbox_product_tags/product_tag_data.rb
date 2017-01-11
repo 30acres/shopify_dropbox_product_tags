@@ -50,6 +50,7 @@ class ProductTagData
       Import.new(path: path).save!
       @notifier.ping "[Product Data] Files Changed" if ENV['SLACK_CMW_WEBHOOK']
       CSV.parse(file, { headers: true }) do |product|
+        @notifier.ping "[Product Data] #{product.inspect}" if ENV['SLACK_CMW_WEBHOOK']
         # binding.pry
         # encoded = CSV.parse(product).to_hash.to_json
         encoded = product.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
