@@ -50,6 +50,7 @@ class ProductTagData
       # Import.new(path: path).save!
       # @notifier.ping "[Product Data] Files Changed" if ENV['SLACK_CMW_WEBHOOK']
       puts 'HERE!!!'
+      binding.pry
       CSV.parse(file, { headers: true }) do |row|
         # @notifier.ping "[Product Data] #{product.inspect}" if ENV['SLACK_CMW_WEBHOOK']
         # binding.pry
