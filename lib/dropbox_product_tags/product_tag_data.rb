@@ -15,6 +15,7 @@ module ImportProductTags
       puts 'Get Files'
       puts path
       ProductTagData.new(path).get_csv
+     puts " stop? ***********************************************"
 
       ## update the descriptions
       puts 'Tag Data'
@@ -41,7 +42,7 @@ class ProductTagData
     puts "===== H E R E ====="
     already_imported = Import.where(path: path).any?
     puts "===== H E R E ====="
-    unless already_imported
+    if !already_imported or 1 == 1
       @notifier.ping "[Product Data] Files Changed"
       # binding.pry
       CSV.parse(file, headers: true, :header_converters => :symbol) do |row|
