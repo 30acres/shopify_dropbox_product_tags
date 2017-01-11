@@ -42,42 +42,24 @@ class ProductTagData
     @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#cmw_data', username: 'Import Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
   end
 
-  def get_csv
+   def get_csv
 
-    # already_imported = Import.where(path: path).any?
+    already_imported = Import.where(path: path, modified: modified).any?
 
-    # unless already_imported
-      # Import.new(path: path).save!
-      # @notifier.ping "[Product Data] Files Changed" if ENV['SLACK_CMW_WEBHOOK']
-      puts 'HERE!!!'
-      # binding.pry
-      
-      CSV.parse(file, { headers: true }).each do |row|
-        # binding.pry
-        # puts 'MEH!?'
-        encoded = CSV.parse(row).to_hash.to_json
-        puts '1'
-        encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
-        puts '2'
+    unless already_imported
+      @notifier.ping "[Product Data] Files Changed"
+      CSV.parse(file, { headers: true }) do |product|
+        # encoded = CSV.parse(product).to_hash.to_json
+        encoded = product.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
         encoded_more = encoded.to_json
-        puts '3'
         puts encoded_more
+        RawDatum.create(data: encoded_more, client_id: 0, status: 10)
 
-        rd = RawDatum.where(data: encoded, client_id: 0, status: 10).first_or_create
-        puts '4'
-
-        puts "===================="
-        puts "===================="
-        puts "===================="
-        puts RawDatum.count
-        puts "===================="
-        puts "===================="
-        puts "===================="
-        rd.save!
       end
-    # else
-    #   @notifier.ping "[Product Data] No Changes" if ENV['SLACK_CMW_WEBHOOK']
-    # end
+      Import.new(path: path, modified: modified).save!
+    else
+      @notifier.ping "[Product Data] No Changes"
+    end
   end
 
   def self.delete_datum
