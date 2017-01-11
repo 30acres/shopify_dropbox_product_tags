@@ -45,6 +45,7 @@ class ProductTagData
       @notifier.ping "[Product Data] Files Changed"
       # binding.pry
       CSV.parse(file, headers: true, :header_converters => :symbol) do |row|
+        puts "***********************************************"
         puts file
         puts file.class
         puts row
