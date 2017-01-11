@@ -13,7 +13,7 @@ module ImportProductTags
 
     if path
       ## Clear the Decks
-      ProductTagData.delete_datum
+      # ProductTagData.delete_datum
 
       ## get the csv
       # binding.pry
@@ -28,7 +28,7 @@ module ImportProductTags
       puts 'End Process'
 
       ## Clear the decks again
-      ProductTagData.delete_datum
+      # ProductTagData.delete_datum
 
       @notifier.ping "[Product Data] Finished Import"
 
