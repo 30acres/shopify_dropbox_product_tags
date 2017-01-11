@@ -51,7 +51,7 @@ class ProductTagData
     # unless already_imported
       @notifier.ping "[Product Data] Files Changed"
       binding.pry
-      FasterCSV.parse(file, headers: true, :header_converters => :symbol) do |row|
+      CSV.parse(file, headers: true, :header_converters => :symbol) do |row|
         puts file
         puts file.class
         puts row
