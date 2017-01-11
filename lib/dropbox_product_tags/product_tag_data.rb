@@ -18,6 +18,7 @@ module ImportProductTags
       ## get the csv
       # binding.pry
       puts 'Get Files'
+      puts path
       ProductTagData.new(path).get_csv
 
       ## parse the rows
@@ -44,6 +45,7 @@ class ProductTagData
 
    def get_csv
 
+    puts "===== H E R E ====="
     already_imported = Import.where(path: path, modified: modified).any?
     puts "===== H E R E ====="
     # unless already_imported
