@@ -51,10 +51,9 @@ class ProductTagData
       # @notifier.ping "[Product Data] Files Changed" if ENV['SLACK_CMW_WEBHOOK']
       puts 'HERE!!!'
       # binding.pry
-      rows = CSV.parse(file, { headers: true })
-      puts 'meh'
-      puts rows
-      rows.each do |row|
+      
+      CSV.parse(file, { headers: true }) do |row|
+        binding.pry
         puts 'MEH!?'
         # @notifier.ping "[Product Data] #{product.inspect}" if ENV['SLACK_CMW_WEBHOOK']
         # binding.pry
