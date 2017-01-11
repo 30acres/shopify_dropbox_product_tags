@@ -45,7 +45,7 @@ class ProductTagData
     if !already_imported or 1 == 1
       @notifier.ping "[Product Data] Files Changed"
       # binding.pry
-      CSV.parse(file, headers: true, :header_converters => :symbol) do |row|
+      CSV.foreach(file, headers: true, :header_converters => :symbol) do |row|
         puts "***********************************************"
         puts file
         puts file.class
