@@ -50,9 +50,9 @@ class ProductTagData
     puts "===== H E R E ====="
     # unless already_imported
       @notifier.ping "[Product Data] Files Changed"
-      FCSV.foreach(file, headers: true, :header_converters => :symbol) do |product|
+      FCSV.foreach(file, headers: true, :header_converters => :symbol) do |row|
         # encoded = CSV.parse(product).to_hash.to_json
-        encoded = product.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
+        encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
         encoded_more = encoded.to_json
         puts encoded_more
         RawDatum.create(data: encoded_more, client_id: 0, status: 10)
