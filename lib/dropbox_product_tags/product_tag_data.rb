@@ -50,13 +50,14 @@ class ProductTagData
       # Import.new(path: path).save!
       # @notifier.ping "[Product Data] Files Changed" if ENV['SLACK_CMW_WEBHOOK']
       puts 'HERE!!!'
-      binding.pry
-      CSV.parse(file, { headers: true }) do |row|
+      # binding.pry
+      rows = CSV.parse(file, { headers: true })
+      rows.each do |row|
         # @notifier.ping "[Product Data] #{product.inspect}" if ENV['SLACK_CMW_WEBHOOK']
         # binding.pry
-        # encoded = CSV.parse(product).to_hash.to_json
-        # encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
-        # encoded_more = encoded.to_json
+        encoded = CSV.parse(row).to_hash.to_json
+        encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
+        encoded_more = encoded.to_json
         # puts encoded_more
         rd = RawDatum.where(data: encoded_more, client_id: 0, status: 10).first_or_create
 
