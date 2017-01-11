@@ -17,11 +17,14 @@ module ImportProductTags
 
       ## get the csv
       # binding.pry
+      puts 'Get Files'
       ProductTagData.new(path).get_csv
 
       ## parse the rows
       ## update the descriptions
+      puts 'Tag Data'
       ProductTagData.process_products
+      puts 'End Process'
 
       ## Clear the decks again
       # ProductTagData.delete_datum
@@ -85,6 +88,7 @@ class ProductTagData
     RawDatum.unscoped.where(status: 10).each do |data|
       # binding.pry
       code = data.data["sku"]
+      puts code
       if shopify_variants.any? and !code.blank?
         matches = shopify_variants.select { |sv| sv.sku == code }
         # binding.pry
