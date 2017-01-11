@@ -52,24 +52,24 @@ class ProductTagData
       puts 'HERE!!!'
       # binding.pry
       
-      CSV.parse(file, { headers: true }) do |row|
+      CSV.parse(file, { headers: true }).each do |row|
         binding.pry
         puts 'MEH!?'
         # @notifier.ping "[Product Data] #{product.inspect}" if ENV['SLACK_CMW_WEBHOOK']
         # binding.pry
-        # encoded = CSV.parse(row).to_hash.to_json
-        # encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
-        # encoded_more = encoded.to_json
-        # # puts encoded_more
-        rd = RawDatum.where(data: 'abc', client_id: 0, status: 10).first_or_create
+        encoded = CSV.parse(row).to_hash.to_json
+        encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
+        encoded_more = encoded.to_json
+        # puts encoded_more
+        rd = RawDatum.where(data: encoded_more, client_id: 0, status: 10).first_or_create
 
-        # puts "===================="
-        # puts "===================="
-        # puts "===================="
-        # puts RawDatum.count
-        # puts "===================="
-        # puts "===================="
-        # puts "===================="
+        puts "===================="
+        puts "===================="
+        puts "===================="
+        puts RawDatum.count
+        puts "===================="
+        puts "===================="
+        puts "===================="
         rd.save!
       end
     # else
