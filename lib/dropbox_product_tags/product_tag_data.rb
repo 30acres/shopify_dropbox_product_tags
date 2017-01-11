@@ -46,7 +46,7 @@ class ProductTagData
    def get_csv
 
     puts "===== H E R E ====="
-    already_imported = Import.where(path: path, modified: modified).any?
+    already_imported = Import.where(path: path).any?
     puts "===== H E R E ====="
     # unless already_imported
       @notifier.ping "[Product Data] Files Changed"
@@ -58,7 +58,7 @@ class ProductTagData
         RawDatum.create(data: encoded_more, client_id: 0, status: 10)
 
       end
-      Import.new(path: path, modified: modified).save!
+      Import.new(path: path).save!
     # else
       # @notifier.ping "[Product Data] No Changes"
     # end
