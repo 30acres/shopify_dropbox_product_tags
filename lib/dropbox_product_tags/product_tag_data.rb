@@ -46,7 +46,7 @@ class ProductTagData
 
     already_imported = Import.where(path: path, modified: modified).any?
 
-    unless already_imported
+    # unless already_imported
       @notifier.ping "[Product Data] Files Changed"
       FCSV.foreach(file, headers: true, :header_converters => :symbol) do |product|
         # encoded = CSV.parse(product).to_hash.to_json
@@ -57,9 +57,9 @@ class ProductTagData
 
       end
       Import.new(path: path, modified: modified).save!
-    else
-      @notifier.ping "[Product Data] No Changes"
-    end
+    # else
+      # @notifier.ping "[Product Data] No Changes"
+    # end
   end
 
   def self.delete_datum
