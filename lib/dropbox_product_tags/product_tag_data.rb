@@ -52,7 +52,7 @@ class ProductTagData
       @notifier.ping "[Product Data] Files Changed"
       # binding.pry
       contents = CSV.parse(file, headers: true, :header_converters => :symbol) 
-      contents.each do |row|
+      contents do |row|
         puts file
         puts file.class
         puts row
@@ -87,7 +87,7 @@ class ProductTagData
 
   def self.process_products
     @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#cmw_data', username: 'Data Notifier', icon_url: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
-  
+    @notifier.ping "Processing...."
     shopify_variants = []
     [1,2,3,4,5,6].each do |page|
       # binding.pry
