@@ -18,7 +18,7 @@ module ImportProductTags
       ## get the csv
       # binding.pry
       puts 'Get Files'
-      ProductTagData.new(path).get_csv
+      # ProductTagData.new(path).get_csv
 
       ## parse the rows
       ## update the descriptions
