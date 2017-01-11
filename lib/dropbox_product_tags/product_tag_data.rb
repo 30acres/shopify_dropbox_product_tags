@@ -46,7 +46,7 @@ class ProductTagData
 
     already_imported = Import.where(path: path).any?
 
-    unless already_imported
+    # unless already_imported
       Import.new(path: path).save!
       @notifier.ping "[Product Data] Files Changed" if ENV['SLACK_CMW_WEBHOOK']
       CSV.parse(file, { headers: true }) do |product|
@@ -57,9 +57,9 @@ class ProductTagData
         # puts encoded_more
         RawDatum.create(data: encoded_more, client_id: 0, status: 10)
       end
-    else
-      @notifier.ping "[Product Data] No Changes" if ENV['SLACK_CMW_WEBHOOK']
-    end
+    # else
+    #   @notifier.ping "[Product Data] No Changes" if ENV['SLACK_CMW_WEBHOOK']
+    # end
   end
 
   def self.delete_datum
@@ -81,8 +81,10 @@ class ProductTagData
   
     shopify_variants = []
     [1,2,3,4,5,6].each do |page|
-      binding.pry
-      shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku, product_id', page: page } )
+      # binding.pry
+      ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku, product_id', page: page } ).each do |sv|
+        shopify_variants << sv
+      end
 
     end
     shopify_variants = shopify_variants.flatten
