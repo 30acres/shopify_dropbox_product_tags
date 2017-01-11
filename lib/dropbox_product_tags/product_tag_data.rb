@@ -45,7 +45,7 @@ class ProductTagData
    def get_csv
 
     already_imported = Import.where(path: path, modified: modified).any?
-
+    puts "===== H E R E ====="
     # unless already_imported
       @notifier.ping "[Product Data] Files Changed"
       FCSV.foreach(file, headers: true, :header_converters => :symbol) do |product|
