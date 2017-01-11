@@ -12,22 +12,15 @@ module ImportProductTags
       @notifier.ping "[Product Data] Started Import"
 
     if path
-      ## Clear the Decks
-      # ProductTagData.delete_datum
-
-      ## get the csv
-      # binding.pry
       puts 'Get Files'
       puts path
       ProductTagData.new(path).get_csv
 
-      ## parse the rows
       ## update the descriptions
       puts 'Tag Data'
       ProductTagData.process_products
       puts 'End Process'
 
-      ## Clear the decks again
       # ProductTagData.delete_datum
 
       @notifier.ping "[Product Data] Finished Import"
@@ -136,40 +129,14 @@ class ProductTagData
     puts '---=============-----'
     sleep(1)
     oldtags = ''
-    # clean_designers = [['Cline','Céline'],['lvaro','Álvaro'],['Vanessa Bruno (ath)','Vanessa Bruno (athé)'],['Marsll','Marsèll'],['Hrve Lger','Hérve Léger'],['Alaa','Alaïa']]
-
 
     if variant.nil?
       puts 'NO MATCH'
-      # product = ShopifyAPI::Product.new
-      # binding.pry
     else
       puts 'MATCH FOUND'
       product = ShopifyAPI::Product.find(variant.product_id)
       oldtags = product.tags
-      # binding.pry
     end
-    # designer = match.data["Designer"].strip
-
-    # clean_designers.each do |cd|
-    #   if designer.downcase == cd[0].downcase
-    #     designer = cd[1]
-    #   end
-    # end
-
-    # product.title = match.data["Product Title"].gsub('  ',' ')
-    # clean_designers.each do |cd|
-    #   product.title = product.title.gsub(cd[0],cd[1])
-    # end
-
-    # desc = match.data["Description"]
-    # product.body_html = desc
-    # product.product_type = match.data['Category']
-
-    # product.vendor = designer
-
-    # product.metafields_global_title_tag = product.title
-    # product.metafields_global_description_tag = desc
 
     ordered_tags = Array.new([
 'hot_price',
@@ -214,15 +181,7 @@ puts 'Got here'
     end
     product.tags = tagz.join(',')
 
-
     puts "#{product.title} :: UPDATED!!!"
-    # if match.data["Publish on Website"] == 'Yes'
-    #  if !product.id or (product.id and product.published_at.nil?)
-    #     product.published_at = DateTime.now - 10.hours
-    #   end
-    # else
-    #   product.published_at = nil
-    # end
     puts product.inspect
 
     puts '====================================='
@@ -237,55 +196,9 @@ puts 'Got here'
       # v = ShopifyAPI::Variant.new
     end
 
-    # ['Australian Size','Colour','Material'].each_with_index do |opt,index|
-    #   # binding.pry
-    #     if index == 0
-    #       d = match.data[opt].to_s.strip
-    #       v.option1 = d.blank? ? 'n/a' : d
-    #     end
-    #     if index == 1
-    #       d = match.data[opt].to_s.strip
-    #       v.option2 = d.blank? ? 'n/a' : d
-    #     end
-    #     if index == 2
-    #       d = match.data[opt].to_s.strip
-    #       v.option3 = d.blank? ? 'n/a' : d
-    #     end
-    # end
-
-    # compare_at_price = Float(match.data["Price (before Sale)"].to_s.gsub('$','')) rescue false ? match.data["Price (before Sale)"] : nil
-
     v.product_id = product.id
-    # v.price = match.data["Price"].gsub('$','').gsub(',','').to_s.strip.to_f
-    # v.sku = match.data["*ItemCode"]
-    # v.grams = match.data["Weight (grams)"].to_i
-    # v.compare_at_price = compare_at_price
-
-    # v.inventory_quantity = match.data["NumStockAvailable"]
-    # v.old_inventory_quantity = match.data["NumStockAvailable"]
-    # v.requires_shipping = true
-    # v.barcode = nil
-    # v.taxable = true
-    # v.position = 1
-    # v.inventory_policy = 'deny'
-    # v.fulfillment_service = "manual"
-    # v.inventory_management = "shopify"
-    # # weight: match.data["Weight (grams)"].to_i/100,
-    # v.weight_unit = "g"
-    # puts v.inspect
-    # # binding.pry
-    # product.variants = [v]
-    # binding.pry
     product.save!
-    # v.save!
     puts '====================================='
-
-    # if variant.nil?
-    #   updates << "Product Data: New Product: #{product.title}"
-    # else
-    #   updates << "Product Data: Updated Product #{product.title}"
-    # end
-
     puts '=== V A R I A N T S A V E D ============================='
     puts '====================================='
 
