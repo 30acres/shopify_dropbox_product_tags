@@ -61,7 +61,7 @@ class ProductTagData
         encoded_more = encoded.to_json
         puts encoded_more
         if !encoded_more['sku'].blank?
-          RawDatum.create(data: encoded_more, client_id: 0, status: 10)
+          RawDatum.where(data: encoded_more, client_id: 0, status: 10).first_or_create
         end
 
       end
