@@ -51,6 +51,9 @@ class ProductTagData
     # unless already_imported
       @notifier.ping "[Product Data] Files Changed"
       FCSV.foreach(file, headers: true, :header_converters => :symbol) do |row|
+        puts file
+        puts file.class
+        puts row
         # encoded = CSV.parse(product).to_hash.to_json
         encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
         encoded_more = encoded.to_json
