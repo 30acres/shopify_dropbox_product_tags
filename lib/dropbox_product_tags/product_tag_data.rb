@@ -52,6 +52,7 @@ class ProductTagData
         encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
         encoded_more = encoded.to_json
         puts encoded_more
+        puts "***********************************************"
         if !encoded_more['sku'].blank?
           RawDatum.where(data: encoded_more, client_id: 0, status: 10).first_or_create
         end
