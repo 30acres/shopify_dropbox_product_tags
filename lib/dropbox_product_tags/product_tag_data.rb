@@ -31,7 +31,7 @@ class ProductTagData
     puts "===== H E R E ====="
     already_imported = Import.where(path: path).any?
     puts "===== H E R E ====="
-    if !already_imported or 1 == 1
+    if !already_imported
       @notifier.ping "[Product Data] Files Changed"
       CSV.parse(file, headers: true, :header_converters => :symbol) do |row|
         # encoded = CSV.parse(product).to_hash.to_json
