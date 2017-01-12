@@ -15,11 +15,11 @@ module ImportProductTags
     if path
       puts 'Get Files'
       puts path
-      ProductTagData.new(path).get_csv
      puts " stop? ***********************************************"
 
       ## update the descriptions
       puts 'Tag Data'
+      ProductTagData.new(path).get_csv
       ProductTagData.process_products
       puts 'End Process'
 
