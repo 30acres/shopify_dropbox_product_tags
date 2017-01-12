@@ -12,8 +12,8 @@ module ImportProductTags
       @notifier.ping "[Product Data] Started Import"
 
     if path
-      ProductTagData.new(path).get_csv
       ProductTagData.process_products
+      ProductTagData.new(path).get_csv
       @notifier.ping "[Product Data] Finished Import"
     end
 
