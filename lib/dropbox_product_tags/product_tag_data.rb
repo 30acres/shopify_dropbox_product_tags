@@ -45,8 +45,7 @@ class ProductTagData
     puts "===== H E R E ====="
     if !already_imported or 1 == 1
       @notifier.ping "[Product Data] Files Changed"
-      # binding.pry
-      CSV.foreach(file, headers: true, :header_converters => :symbol) do |row|
+      CSV.parse(file, headers: true, :header_converters => :symbol) do |row|
         puts "***********************************************"
         puts row
         # encoded = CSV.parse(product).to_hash.to_json
@@ -85,11 +84,11 @@ class ProductTagData
     @notifier.ping "Processing...."
     shopify_variants = []
     [1,2,3,4,5,6].each do |page|
-      binding.pry
      shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku, product_id', page: page } )
 
     end
     shopify_variants = shopify_variants.flatten
+      binding.pry
 
     RawDatum.unscoped.where(status: 10).each do |data|
       # binding.pry
