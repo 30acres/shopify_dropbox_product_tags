@@ -37,10 +37,10 @@ class ProductTagData
       CSV.parse(file, headers: true, :header_converters => :symbol) do |row|
         # encoded = CSV.parse(product).to_hash.to_json
         encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
-        encoded_more = encoded.to_json
+        # encoded_more = encoded.to_json
         if !row[:sku].blank?
           d = RawDatum.where(sku: row[:sku],client_id: 0, status: 10).first_or_create
-          d.data = row.to_hash
+          d.data = encoded.to_hash
           d.save!
         end
 
