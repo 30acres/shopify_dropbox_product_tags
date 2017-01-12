@@ -130,7 +130,7 @@ class ProductTagData
       'country',
       'estate',
       'product_awards',
-      'product_ratings',
+      # 'product_ratings',
       'rating_cellarmaster',
       'region',
       'vintage',
