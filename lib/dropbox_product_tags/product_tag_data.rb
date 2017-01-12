@@ -88,9 +88,7 @@ class ProductTagData
     shopify_variants = []
     [1,2,3,4,5,6].each do |page|
       binding.pry
-      ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku, product_id', page: page } ).each do |sv|
-        shopify_variants << sv
-      end
+     shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku, product_id', page: page } )
 
     end
     shopify_variants = shopify_variants.flatten
