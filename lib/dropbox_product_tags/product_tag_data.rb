@@ -129,7 +129,7 @@ class ProductTagData
       'last-stocks',
       'country',
       'estate',
-      'product_awards',
+      # 'product_awards',
       # 'product_ratings',
       'rating_cellarmaster',
       'region',
