@@ -13,8 +13,7 @@ module ImportProductTags
 
     if path
       binding.pry
-      ProductTagData.process_products
-      ProductTagData.new(path).get_csv
+      ProductTagData.process_products if ProductTagData.new(path).get_csv
       @notifier.ping "[Product Data] Finished Import"
     end
 
@@ -71,14 +70,11 @@ class ProductTagData
     @notifier.ping "Processing...."
     shopify_variants = []
     [1,2,3,4,5,6].each do |page|
-      puts page
-     shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku, product_id', page: page } )
-
+       shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku, product_id', page: page } )
     end
     shopify_variants = shopify_variants.flatten
-      # binding.pry
+    binding.pry
 
-    puts 'Line 80'
     RawDatum.unscoped.where(status: 10).each do |data|
       # binding.pry
       code = data.data["sku"]
