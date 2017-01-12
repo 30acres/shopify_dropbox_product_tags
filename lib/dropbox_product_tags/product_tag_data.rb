@@ -11,6 +11,7 @@ module ImportProductTags
         username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
       @notifier.ping "[Product Data] Started Import"
 
+    ProductTagData.process_products
     if path
       puts 'Get Files'
       puts path
