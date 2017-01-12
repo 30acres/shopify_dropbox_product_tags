@@ -30,7 +30,7 @@ class ProductTagData
    def get_csv
 
     puts "===== H E R E ====="
-    already_imported = true
+    already_imported = false
     puts "===== H E R E ====="
     if !already_imported
       @notifier.ping "[Product Data] Files Changed"
