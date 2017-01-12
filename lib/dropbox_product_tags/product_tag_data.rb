@@ -87,7 +87,7 @@ class ProductTagData
     @notifier.ping "Processing...."
     shopify_variants = []
     [1,2,3,4,5,6].each do |page|
-      # binding.pry
+      binding.pry
       ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku, product_id', page: page } ).each do |sv|
         shopify_variants << sv
       end
