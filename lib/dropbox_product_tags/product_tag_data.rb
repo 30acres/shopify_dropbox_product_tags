@@ -65,16 +65,19 @@ class ProductTagData
 
 
   def self.process_products
+    puts "PUT PRODUCT PROCESS"
     @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#cmw_data', username: 'Data Notifier', icon_url: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
     @notifier.ping "Processing...."
     shopify_variants = []
     [1,2,3,4,5,6].each do |page|
+      puts page
      shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku, product_id', page: page } )
 
     end
     shopify_variants = shopify_variants.flatten
       # binding.pry
 
+    puts 'Line 80'
     RawDatum.unscoped.where(status: 10).each do |data|
       # binding.pry
       code = data.data["sku"]
