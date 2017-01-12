@@ -11,7 +11,6 @@ module ImportProductTags
         username: 'Data Notifier', icon: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
       @notifier.ping "[Product Data] Started Import"
 
-    ProductTagData.process_products
     if path
       ProductTagData.new(path).get_csv
       ProductTagData.process_products
@@ -35,13 +34,9 @@ class ProductTagData
     if !already_imported or 1 == 1
       @notifier.ping "[Product Data] Files Changed"
       CSV.parse(file, headers: true, :header_converters => :symbol) do |row|
-        puts "***********************************************"
-        puts row
         # encoded = CSV.parse(product).to_hash.to_json
         encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
         encoded_more = encoded.to_json
-        puts encoded_more
-        puts "***********************************************"
         if !encoded_more['sku'].blank?
           d = RawDatum.where(sku: encoded_more['sku'],client_id: 0, status: 10).first_or_create
           d.data = encoded_more
@@ -70,7 +65,6 @@ class ProductTagData
 
 
   def self.process_products
-    puts "========>"
     @notifier = Slack::Notifier.new ENV['SLACK_CMW_WEBHOOK'], channel: '#cmw_data', username: 'Data Notifier', icon_url: 'https://cdn.shopify.com/s/files/1/1290/9713/t/4/assets/favicon.png?3454692878987139175'
     @notifier.ping "Processing...."
     shopify_variants = []
