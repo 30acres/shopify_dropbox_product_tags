@@ -54,7 +54,9 @@ class ProductTagData
         puts encoded_more
         puts "***********************************************"
         if !encoded_more['sku'].blank?
-          RawDatum.where(data: encoded_more, client_id: 0, status: 10).first_or_create
+          d = RawDatum.where(sku: encoded_more['sku'],client_id: 0, status: 10).first_or_create
+          d.data = encoded_more
+          d.save!
         end
 
       end
