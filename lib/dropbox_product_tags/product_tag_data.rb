@@ -40,7 +40,7 @@ class ProductTagData
         # encoded_more = encoded.to_json
         if !row[:sku].blank?
           d = RawDatum.where(sku: row[:sku],client_id: 0, status: 10).first_or_create
-          d.data = encoded.to_hash
+          d.data = encoded
           d.save!
         end
 
