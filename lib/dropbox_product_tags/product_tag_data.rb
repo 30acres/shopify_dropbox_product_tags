@@ -13,20 +13,9 @@ module ImportProductTags
 
     ProductTagData.process_products
     if path
-      puts 'Get Files'
-      puts path
-     puts " stop? ***********************************************"
-
-      ## update the descriptions
-      puts 'Tag Data'
       ProductTagData.new(path).get_csv
       ProductTagData.process_products
-      puts 'End Process'
-
-      # ProductTagData.delete_datum
-
       @notifier.ping "[Product Data] Finished Import"
-
     end
 
   end
@@ -90,7 +79,7 @@ class ProductTagData
 
     end
     shopify_variants = shopify_variants.flatten
-      binding.pry
+      # binding.pry
 
     RawDatum.unscoped.where(status: 10).each do |data|
       # binding.pry
@@ -139,39 +128,39 @@ class ProductTagData
     end
 
     ordered_tags = Array.new([
-'hot_price',
-'aks_choice',
-'reduced_to_clear',
-'last-stocks',
-'country',
-'estate',
-'product_awards',
-'product_ratings',
-'rating_cellarmaster',
-'region',
-'vintage',
-'estate',
-'awards_decanter_bronze',
-'awards_decanter_gold',
-'awards_decanter_silver',
-'awards_international_bronze',
-'awards_international_gold',
-'awards_international_silver',
-'awards_winespirits_bronze',
-'awards_winespirits_gold',
-'awards_winespirits_silver',
-'rating_cellarmaster',
-'rating_decantar',
-'rating_enthusiast',
-'rating_halliday',
-'rating_oliver',
-'rating_parker',
-'rating_spectator',
-'rating_suckling',
-'rating_wro',
-'backstock_preorders'
-])
-puts 'Got here'
+      'hot_price',
+      'aks_choice',
+      'reduced_to_clear',
+      'last-stocks',
+      'country',
+      'estate',
+      'product_awards',
+      'product_ratings',
+      'rating_cellarmaster',
+      'region',
+      'vintage',
+      'estate',
+      'awards_decanter_bronze',
+      'awards_decanter_gold',
+      'awards_decanter_silver',
+      'awards_international_bronze',
+      'awards_international_gold',
+      'awards_international_silver',
+      'awards_winespirits_bronze',
+      'awards_winespirits_gold',
+      'awards_winespirits_silver',
+      'rating_cellarmaster',
+      'rating_decantar',
+      'rating_enthusiast',
+      'rating_halliday',
+      'rating_oliver',
+      'rating_parker',
+      'rating_spectator',
+      'rating_suckling',
+      'rating_wro',
+      'backstock_preorders'
+    ])
+    puts 'Got here'
   #
     tagz = []
     ordered_tags.each do |tag|
