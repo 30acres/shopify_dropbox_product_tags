@@ -13,7 +13,8 @@ module ImportProductTags
 
     if path
       # binding.pry
-      ProductTagData.process_products if ProductTagData.new(path).get_csv
+      ProductTagData.new(path).get_csv
+      ProductTagData.process_products 
       @notifier.ping "[Product Data] Finished Import"
     end
 
@@ -29,7 +30,7 @@ class ProductTagData
    def get_csv
 
     puts "===== H E R E ====="
-    already_imported = Import.where(path: path).any?
+    already_imported = false
     puts "===== H E R E ====="
     if !already_imported
       @notifier.ping "[Product Data] Files Changed"
@@ -37,7 +38,9 @@ class ProductTagData
         # encoded = CSV.parse(product).to_hash.to_json
         encoded = row.to_hash.inject({}) { |h, (k, v)| h[k] = v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').valid_encoding? ? v.to_s.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '') : '' ; h }
         encoded_more = encoded.to_json
+        binding.pry
         if !encoded_more['sku'].blank?
+          binding.pry
           d = RawDatum.where(sku: encoded_more['sku'],client_id: 0, status: 10).first_or_create
           d.data = encoded_more
           d.save!
@@ -73,7 +76,7 @@ class ProductTagData
        shopify_variants << ShopifyAPI::Variant.find(:all, params: { limit: 250, fields: 'sku, product_id', page: page } )
     end
     shopify_variants = shopify_variants.flatten
-    binding.pry
+    # binding.pry
 
     RawDatum.unscoped.where(status: 10).each do |data|
       # binding.pry
