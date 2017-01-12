@@ -181,7 +181,11 @@ class ProductTagData
     end
 
     v.product_id = product.id
+    begin
     product.save!
+    rescue
+      binding.pry
+    end
     puts '====================================='
     puts '=== V A R I A N T S A V E D ============================='
     puts '====================================='
