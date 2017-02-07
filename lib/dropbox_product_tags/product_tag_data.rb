@@ -121,6 +121,10 @@ class ProductTagData
       product = ShopifyAPI::Product.find(variant.product_id)
       oldtags = product.tags
     end
+    metafields = Array.new([
+      'product_awards',
+      'product_ratings'
+    ])
 
     ordered_tags = Array.new([
       'hot_price',
@@ -185,6 +189,16 @@ class ProductTagData
     product.save!
     rescue
       binding.pry
+    end
+
+    metafields.each do |tag|
+      if !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?))
+        meta = ShopifyAPI::Metafield.new(namespace: 'product_details', key: tag, value: match.data[tag]., value_type: 'string', owner_resource: 'product', owner_id: @product.id)
+        meta.save!
+        puts '====================================='
+        puts '=== M E T A  S A V E D ============================='
+        puts '====================================='
+      end
     end
     puts '====================================='
     puts '=== V A R I A N T S A V E D ============================='
