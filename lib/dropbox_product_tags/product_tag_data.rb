@@ -193,7 +193,7 @@ class ProductTagData
 
     metafields.each do |tag|
       if !(match.data[tag].nil? or (match.data[tag].to_s.downcase == 'n/a') or (match.data[tag].blank?))
-        meta = ShopifyAPI::Metafield.new(namespace: 'product_details', key: tag, value: match.data[tag]., value_type: 'string', owner_resource: 'product', owner_id: @product.id)
+        meta = ShopifyAPI::Metafield.new({namespace: 'product_details', key: tag, value: match.data[tag], value_type: 'string', owner_resource: 'product', owner_id: @product.id})
         meta.save!
         puts '====================================='
         puts '=== M E T A  S A V E D ============================='
